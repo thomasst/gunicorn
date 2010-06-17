@@ -196,7 +196,6 @@ def validate_pos_int(val):
     else:
         # Booleans are ints!
         val = int(val)
-    #print "Setting: %s" % val
     if val < 0:
         raise ValueError("Value must be positive: %s" % val)
     return val
@@ -212,8 +211,6 @@ def validate_callable(arity):
     def _validate_callable(val):
         if not callable(val):
             raise TypeError("Value is not callable: %s" % val)
-        print val
-        print inspect.getargspec(val)[0]
         if arity != len(inspect.getargspec(val)[0]):
             raise TypeError("Value must have an arity of: %s" % arity)
         return val
