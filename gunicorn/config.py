@@ -67,7 +67,7 @@ class Config(object):
         uri = self.settings['worker_class'].get()
         worker_class = util.load_worker_class(uri)
         if hasattr(worker_class, "setup"):
-            worker_classetup()
+            worker_class.setup()
         return worker_class
 
     @property   
@@ -288,11 +288,11 @@ class WorkerClass(Setting):
         
         The default async class should handle most 'normal' types of work load
         You'll want to read http://gunicorn.org/design.hml for information on
-        when you might want to choose one of the other worker classe
+        when you might want to choose one of the other worker classes.
         
         An string referring to a 'gunicorn.workers' entry point or a
         MODULE:CLASS pair where CLASS is a subclass of
-        gunicorn.workerbase.Worker.
+        gunicorn.workers.base.Worker.
         
         The default provided values are:
         
@@ -327,8 +327,8 @@ class Timeout(Setting):
     desc = """\
         Workers silent for more than this many seconds are killed and restarted.
         
-        Generally set to thirty second Only set this noticeably higher if
-        you're sure of the repercussions for sync worker For the non sync
+        Generally set to thirty seconds. Only set this noticeably higher if
+        you're sure of the repercussions for sync workers. For the non sync
         workers it just means that the worker process is still communicating and
         is not tied to the length of time required to handle a single request.
         """
@@ -385,7 +385,7 @@ class PreloadApp(Setting):
         Load application code before the worker processes are forked.
         
         By preloading an application you can save some RAM resources as well as
-        speed up server boot time Although, if you defer application loading
+        speed up server boot times. Although, if you defer application loading
         to each worker process, you can reload your application code easily by
         restarting worker
         """
@@ -398,7 +398,7 @@ class Daemon(Setting):
     action = "store_true"
     default = False
     desc = """\
-        Daemonize the Gunicorn proces
+        Daemonize the Gunicorn process.
         
         Detaches the server from the controlling terminal and enters the
         background.
@@ -458,9 +458,9 @@ class Umask(Setting):
     desc = """\
         A bit mask for the file mode on files written by Gunicorn.
         
-        Note that this affects unix socket permission
+        Note that this affects unix socket permissions.
         
-        A valid value for the oumask(mode) call or a string compatible with
+        A valid value for the os.umask(mode) call or a string compatible with
         int(value, 0) (0 means Python guesses the base, so values like "0",
         "0xFF", "0022" are valid for decimal, hex, and octal representations)
         """
