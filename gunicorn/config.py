@@ -47,8 +47,6 @@ class Config(object):
     def set(self, name, value):
         if name not in self.settings:
             raise AttributeError("No configuration setting for: %s" % name)
-        if callable(value):
-            value = wrap_method(value)
         self.settings[name].set(value)
 
     def parser(self):
@@ -119,7 +117,7 @@ class SettingMeta(type):
         parents = [b for b in bases if isinstance(b, SettingMeta)]
         if not parents:
             return super_new(cls, name, bases, attrs)
-            
+    
         attrs["order"] = len(KNOWN_SETTINGS)
         attrs["validator"] = wrap_method(attrs["validator"])
         
@@ -547,10 +545,11 @@ class DefaultProcName(Setting):
 class Prefork(Setting):
     name = "pre_fork"
     section = "Server Hooks"
-    validator = validate_callable(3)
+    validator = validate_callable(2)
     type = "callable"
-    def def_pre_fork(self, server, worker):
+    def def_pre_fork(server, worker):
         pass
+    def_pre_fork = staticmethod(def_pre_fork)
     default = def_pre_fork
     desc = """\
         Called just before a worker is forked.
@@ -563,10 +562,11 @@ class Prefork(Setting):
 class Postfork(Setting):
     name = "post_fork"
     section = "Server Hooks"
-    validator = validate_callable(3)
+    validator = validate_callable(2)
     type = "callable"
-    def def_post_fork(self, server, worker):
+    def def_post_fork(server, worker):
         server.log.info("Worker spawned (pid: %s)" % worker.pid)
+    def_post_fork = staticmethod(def_post_fork)
     default = def_post_fork
     desc = """\
         Called just after a worker has been forked.
@@ -579,10 +579,12 @@ class Postfork(Setting):
 class WhenReady(Setting):
     name = "when_ready"
     section = "Server Hooks"
-    validator = validate_callable(2)
+    validator = validate_callable(1)
     type = "callable"
-    def def_start_server(self, server):
+    
+    def def_start_server(server):
         pass
+    def_start_server = staticmethod(def_start_server)
     default = def_start_server
     desc = """\
         Called just after the server is started.
@@ -594,10 +596,11 @@ class WhenReady(Setting):
 class PreExec(Setting):
     name = "pre_exec"
     section = "Server Hooks"
-    validator = validate_callable(2)
+    validator = validate_callable(1)
     type = "callable"
-    def def_pre_exec(self, server):
+    def def_pre_exec(server):
         server.log.info("Forked child, reexecuting.")
+    def_pre_exec = staticmethod(def_pre_exec)
     default = def_pre_exec
     desc = """\
         Called just before a new master process is forked.
