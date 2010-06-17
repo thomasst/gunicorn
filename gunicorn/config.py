@@ -250,7 +250,7 @@ class Backlog(Setting):
     type = "int"
     default = 2048
     desc = """\
-        The maximum number of pending connection    
+        The maximum number of pending connections.    
         
         This refers to the number of clients that can be waiting to be served.
         Exceeding this number results in the client getting an error when
@@ -269,7 +269,7 @@ class Workers(Setting):
     type = "int"
     default = 1
     desc = """\
-        The number of worker process for handling request
+        The number of worker process for handling requests.
         
         A positive integer generally in the 2-4 x $(NUM_CORES) range. You'll
         want to vary this a bit to find the best for your particular
@@ -286,7 +286,7 @@ class WorkerClass(Setting):
     desc = """\
         The type of workers to use.
         
-        The default async class should handle most 'normal' types of work load
+        The default async class should handle most 'normal' types of work loads.
         You'll want to read http://gunicorn.org/design.hml for information on
         when you might want to choose one of the other worker classes.
         
@@ -311,9 +311,9 @@ class WorkerConnections(Setting):
     type = "int"
     default = 1000
     desc = """\
-        The maximum number of simultaneous client
+        The maximum number of simultaneous clients.
         
-        This setting only affects the Eventlet and Gevent worker type
+        This setting only affects the Eventlet and Gevent worker types.
         """
 
 class Timeout(Setting):
@@ -358,7 +358,7 @@ class Debug(Setting):
         Turn on debugging in the server.
         
         This limits the number of worker processes to 1 and changes some error
-        handling that's sent to client
+        handling that's sent to clients.
         """
 
 class Spew(Setting):
@@ -387,7 +387,7 @@ class PreloadApp(Setting):
         By preloading an application you can save some RAM resources as well as
         speed up server boot times. Although, if you defer application loading
         to each worker process, you can reload your application code easily by
-        restarting worker
+        restarting workers.
         """
 
 class Daemon(Setting):
@@ -477,7 +477,7 @@ class TmpUploadDir(Setting):
         This may disappear in the near future.
         
         This path should be writable by the process permissions set for Gunicorn
-        worker If not specified, Gunicorn will choose a system generated
+        workers. If not specified, Gunicorn will choose a system generated
         temporary directory.
         """
 
@@ -502,7 +502,7 @@ class Loglevel(Setting):
     validator = validate_string
     default = "info"
     desc = """\
-        The granularity of log output
+        The granularity of log outputs.
         
         Valid level names are:
         
