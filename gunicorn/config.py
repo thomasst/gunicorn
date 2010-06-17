@@ -48,9 +48,7 @@ class Config(object):
         if name not in self.settings:
             raise AttributeError("No configuration setting for: %s" % name)
         if callable(value):
-            print value.func_code.co_argcount
             value = wrap_method(value)
-            print value.func_code.co_argcount
         self.settings[name].set(value)
 
     def parser(self):
